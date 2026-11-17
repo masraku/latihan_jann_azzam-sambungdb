@@ -20,7 +20,7 @@
 
     <table>
         <tr>
-            <th>No</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>Stok</th>
+           <th>No</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th>
         </tr>
         @forelse ($produks as $p)
             <tr>
@@ -29,9 +29,18 @@
                 <td>{{ $p->kategori }}</td>
                 <td>Rp {{ number_format($p->harga, 0, ',', '.') }}</td>
                 <td>{{ $p->stok }}</td>
+                <td>
+                    <a href="{{ route('produk.edit', $p) }}">Edit</a>
+                    <form method="POST" action="{{ route('produk.destroy', $p) }}" style="display:inline"
+                        onsubmit="return confirm('Yakin hapus {{ $p->nama_produk }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Hapus</button>
+                    </form>
+                </td>
             </tr>
         @empty
-            <tr><td colspan="5">Belum ada produk.</td></tr>
+            <tr><td colspan="6">Belum ada produk.</td></tr>
         @endforelse
     </table>
 
@@ -48,9 +57,10 @@
             <label>Kategori</label><br>
             <input name="kategori" value="{{ old('kategori') }}">
             @error('kategori') <br><span class="error">{{ $message }}</span> @enderror
+        </p>
         <p>
             <label>Harga</label><br>
-            <input name="harga" type="number" min="0" value
+            <input name="harga" type="number" min="0" value="{{ old('harga') }}">
             @error('harga') <br><span class="error">{{ $message }}</span> @enderror
         </p>
         <p>

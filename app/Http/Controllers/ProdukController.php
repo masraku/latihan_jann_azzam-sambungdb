@@ -23,7 +23,30 @@ class ProdukController extends Controller
             'stok' => ['required', 'integer', 'min:0'],
         ]);
         Produk::create($data);
-        return redirect()->route('produk.index');
+        return redirect()->route('produk.index')->with('pesan', 'Produk berhasil ditambahkan');
 
+    }
+
+    //Get /produk/{produk}/edit -> tampilkan form edit produk
+    public function edit(Produk $produk){
+        return view('produk.edit', ['produk' => $produk]);
+    }
+
+    //Put /produk/{produk} -> simpan perubahan data produk
+    public function update (Request $request, Produk $produk){
+        $data = $request -> validate([
+            'nama_produk' => ['required', 'string', 'max:255'],
+            'kategori' => ['required', 'string', 'max:255'],
+            'harga' => ['required', 'integer', 'min:0'],
+            'stok' => ['required', 'integer', 'min:0']
+        ]);
+        $produk->update($data);
+        return redirect()->route('produk.index')->with('pesan', 'Produk berhasil diubah');
+    }
+
+    //Delete /produk/{produk} -> hapus data produk
+    public function destroy(Produk $produk){
+        $produk->delete();
+        return redirect()->route('produk.index')->with('pesan', 'Produk berhasil dihapus');
     }
 }
