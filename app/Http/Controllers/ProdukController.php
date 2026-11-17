@@ -49,4 +49,11 @@ class ProdukController extends Controller
         $produk->delete();
         return redirect()->route('produk.index')->with('pesan', 'Produk berhasil dihapus');
     }
+
+    //Filter /produk/filter -> filter produk berdasarkan kategori
+    public function filter(Request $request){
+        $kategori = $request->input('kategori');
+        $produks = Produk::where('kategori', $kategori)->orderBy('nama_produk', 'asc')->get();
+        return view('produk.index', ['produks'=>$produks, 'kategori'=>$kategori]);
+    }
 }

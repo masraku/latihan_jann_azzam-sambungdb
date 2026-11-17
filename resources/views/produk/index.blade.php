@@ -9,6 +9,8 @@
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         .pesan { background: #d1fae5; padding: 8px; }
         .error { color: red; font-size: 14px; }
+        .filter { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+        .info-filter { color: #555; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -16,6 +18,34 @@
 
     @if (session('pesan'))
         <p class="pesan">{{ session('pesan') }}</p>
+    @endif
+
+    @php
+        // Daftar kategori unik dari database untuk isi dropdown.
+        // (Idealnya dikirim dari controller, ini supaya cukup ubah view saja.)
+        $daftarKategori = \App\Models\Produk::select('kategori')->distinct()->orderBy('kategori')->pluck('kategori');
+        $kategoriAktif = $kategori ?? null;
+    @endphp
+
+    <form method="GET" action="{{ route('produk.filter') }}" class="filter">
+        <label for="kategori">Filter kategori:</label>
+        <select name="kategori" id="kategori" required>
+            <option value="" disabled {{ $kategoriAktif ? '' : 'selected' }}>-- Pilih kategori --</option>
+            @foreach ($daftarKategori as $k)
+                <option value="{{ $k }}" {{ $kategoriAktif === $k ? 'selected' : '' }}>{{ $k }}</option>
+            @endforeach
+        </select>
+        <button type="submit">Tampilkan</button>
+
+        @if ($kategoriAktif)
+            <a href="{{ route('produk.index') }}">Tampilkan semua</a>
+        @endif
+    </form>
+
+    @if ($kategoriAktif)
+        <p class="info-filter">
+            Menampilkan kategori <strong>{{ $kategoriAktif }}</strong> ({{ $produks->count() }} produk)
+        </p>
     @endif
 
     <table>
