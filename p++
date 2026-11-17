@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Produk Sekolah</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 16px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .pesan { background: #d1fae5; padding: 8px; }
+        .error { color: red; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>Produk Barang Sekolah</h1>
+
+    @if (session('pesan'))
+        <p class="pesan">{{ session('pesan') }}</p>
+    @endif
+
+    <table>
+        <tr>
+            <th>No</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>Stok</th>
+        </tr>
+        @forelse ($produk as $p)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $p->nama }}</td>
+                <td>{{ $p->kategori }}</td>
+                <td>Rp {{ number_format($p->harga, 0, ',',
+                <td>{{ $p->stok }}</td>
+            </tr>
+        @empty
+            <tr><td colspan="5">Belum ada produk.</td></tr>
+        @endforelse
+    </table>
+
+    <h2>Tambah Produk</h2>
+    <form method="POST" action="/produk">
+        @csrf
+
+        <p>
+            <label>Nama</label><br>
+            <input name="nama" value="{{ old('nama') }}">
+            @error('nama') <br><span class="error">{{ $message }}</span> @enderror
+        </p>
+        <p>
+            <label>Kategori</label><br>
+            <input name="kategori" value="{{ old('kategori') }}">
+            @error('kategori') <br><span class="error">{{ $or
+        </p>
+        <p>
+            <label>Harga</label><br>
+            <input name="harga" type="number" min="0" value
+            @error('harga') <br><span class="error">{{ $message }}</span> @enderror
+        </p>
+        <p>
+            <label>Stok</label><br>
+            <input name="stok" type="number" min="0" value="{{ old('stok', 0) }}">
+            @error('stok') <br><span class="error">{{ $mess
+        </p>
+
+        <button type="submit">Simpan</button>
+    </form>
+</body>
+</html>
+
+
+
+
+
