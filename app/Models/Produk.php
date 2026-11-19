@@ -11,5 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 
 class Produk extends Model
 {
-    //
+    public function seller(){
+        return $this->belongsTo(User::class, 'id_seller');
+    }
 }
