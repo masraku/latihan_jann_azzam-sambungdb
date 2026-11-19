@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
+    <title>Dashboard UTAAMA ADMIN</title>
 </head>
 <body>
     <h1>Dashboard Admin</h1>
