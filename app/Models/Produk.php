@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
 
 #[Table('produks')]
-#[Fillable(['nama_produk', 'kategori', 'harga', 'stok'])]
+#[Fillable(['nama_produk', 'kategori', 'harga', 'stok', 'photo'])]
 
 class Produk extends Model
 {

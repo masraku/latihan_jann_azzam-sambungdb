@@ -22,12 +22,13 @@
     @endif
 
     <h2>Tambah Barang</h2>
-    <form method="POST" action="{{ route('seller.produk.store') }}">
+    <form method="POST" action="{{ route('seller.produk.store') }}" enctype="multipart/form-data">
         @csrf
         <input type="text"   name="nama_produk" value="{{ old('nama_produk') }}" placeholder="Nama produk" required>
         <input type="text"   name="kategori"    value="{{ old('kategori') }}"    placeholder="Kategori" required>
         <input type="number" name="harga"       value="{{ old('harga') }}"       placeholder="Harga" min="0" required>
         <input type="number" name="stok"        value="{{ old('stok') }}"        placeholder="Stok" min="0" required>
+        <input type="file" name="photo" accept="image/*">
         <button type="submit">Tambah</button>
     </form>
 
@@ -39,6 +40,8 @@
             <th>Kategori</th>
             <th>Harga</th>
             <th>Stok</th>
+            <th>Foto</th>
+            <th>Aksi</th>
         </tr>
         @forelse ($produks as $produk)
             <tr>
@@ -47,9 +50,25 @@
                 <td>{{ $produk->kategori }}</td>
                 <td>Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
                 <td>{{ $produk->stok }}</td>
+                <td>
+                    @if ($produk->photo)
+                        <img src="{{ asset('storage/'. $produk->photo) }}" alt="{{ $produk->nama_produk }}" width="120">
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>
+                    <a href="{{ route('seller.produk.edit', $produk) }}">Edit</a>
+                    <form method="POST" action="{{ route('seller.produk.destroy', $produk) }}" style="display:inline"
+                        onsubmit="return confirm('Yakin hapus {{ $produk->nama_produk }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Hapus</button>
+                    </form>
+                </td>
             </tr>
         @empty
-            <tr><td colspan="5">Belum ada barang.</td></tr>
+            <tr><td colspan="7">Belum ada barang.</td></tr>
         @endforelse
     </table>
 
